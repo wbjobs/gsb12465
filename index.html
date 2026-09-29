@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>共享剪贴板队列</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>共享剪贴板队列</h1>
+    <div class="header-meta">
+      <span class="badge" id="tabName">标签页</span>
+      <span class="stat">队列 <b id="queueCount">0</b></span>
+      <span class="stat">固定 <b id="pinnedCount">0</b></span>
+      <span class="stat">版本 <b id="revision">0</b></span>
+      <span class="stat dim">上限 <b id="maxItems">100</b> 条 · <span id="syncStatus">BroadcastChannel 实时同步</span></span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel queue-panel">
+      <div class="toolbar">
+        <input id="addInput" type="text" placeholder="输入文本后回车加入队列（或直接复制任意文本）">
+        <button id="addBtn" class="btn">加入</button>
+      </div>
+      <div class="toolbar">
+        <input id="searchInput" type="search" placeholder="搜索队列内容…">
+        <button id="takeBtn" class="btn primary" title="取出最旧的未固定条目并写入剪贴板">取出</button>
+        <button id="dedupeBtn" class="btn">去重</button>
+        <button id="clearBtn" class="btn danger">清空</button>
+      </div>
+      <p id="emptyHint" class="empty" hidden>队列为空。在任意已打开的标签页中复制文本，即可进入共享队列。</p>
+      <ul id="queueList" class="queue-list"></ul>
+    </section>
+
+    <aside class="panel ops-panel">
+      <div class="ops-header">
+        <h2>操作记录</h2>
+        <select id="opFilter">
+          <option value="all">全部标签页</option>
+          <option value="mine">仅本标签页</option>
+        </select>
+      </div>
+      <p id="opEmpty" class="empty" hidden>暂无操作记录</p>
+      <ul id="opList" class="op-list"></ul>
+    </aside>
+  </main>
+
+  <div id="manualCopy" class="manual-copy" hidden>
+    <div class="manual-copy-box">
+      <p>剪贴板权限被拒绝，请手动复制以下内容（已全选）：</p>
+      <textarea id="manualCopyText" rows="4" readonly></textarea>
+      <button id="closeManualBtn" class="btn">关闭</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/db.js"></script>
+  <script src="js/queue.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
